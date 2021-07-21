@@ -9,7 +9,7 @@ user_agents=[
     "AppleWebKit/537.36 (KHTML, like Gecko)"
 ]
 
-
+# 从列表中随机选取user-agents
 headers = {
     "User-Agent":choice(user_agents)
 }
