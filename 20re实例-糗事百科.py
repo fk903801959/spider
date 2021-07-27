@@ -9,5 +9,7 @@ response = requests.get(url,headers=headers,verify = False)
 # print(response.text)
 
 contents = re.findall(r'<div class="content">\n*<span>\n*(.+)',response.text)
-for info in contents:
-    print(info)
+
+with open('duanzi\qiushibaike.txt','a',encoding='utf-8') as f:
+    for info in contents:
+        f.write(info+"\n\n")
