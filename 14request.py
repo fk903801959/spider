@@ -7,6 +7,6 @@ args ={
     "wd":"尚学堂"
 }
 headers = {"User-Agent":UserAgent().chrome}
-response = requests.get(url,params=args,headers=headers)
+response = requests.get(url,params=args,headers=headers,verify=False)
 response.encoding = "utf-8"
 print(response.text)
