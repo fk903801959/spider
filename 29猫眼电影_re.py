@@ -1,6 +1,6 @@
 from fake_useragent import UserAgent
 import requests
-from bs4 import BeautifulSoup
+from re import findall
 from time import sleep
 
 # 获取指定url地址的页面信息
@@ -20,26 +20,20 @@ def get_html(url):
 # 获取页面信息中关于电影列表的url信息
 def parse_list(html):
     if html:
-        soup = BeautifulSoup(html,'lxml')
-        a_list = soup.select('.channel-detail.movie-item-title a')
-        list_url = []
-        for a in a_list:
-            list_url.append(a.get('href'))
-
+        a_list = findall(r'<div class="channel-detail movie-item-title".+>\s+<a href="(/films/\d+)"',html)
         # 由于每次获得的电影地址为相对路径，故需要在每条相对路径前加上'https://maoyan.com'形成网页的绝对路径
-        list_url = ['https://maoyan.com{}'.format(url) for url in list_url]
+        list_url = ['https://maoyan.com{}'.format(url) for url in a_list]
         return list_url
 
 # 获取每个电影的具体信息，包括电影名称、类型、导演和演员
 def parse_index(html):
-    soup = BeautifulSoup(html,'lxml')
     # 电影名称
-    name = soup.select('h1.name')[0].text
+    name = findall(r'<h1 class="name">(.+)</h1>',html)[0]
     # 电影类型
-    type = soup.select('.ellipsis a')[0].text
+    type = findall(r'<a class="text-link".+target="_blank">(.+)</a>',html)
     # 演员列表
-    actors = soup.select('.celebrity.actor .info a')
-    actors = format_data(actors)
+    actors_a = findall(r'<li class="celebrity actor".+>\s+<a.+>\s+<img.+>\s+</a>\s+<div.+>\s+<a.+>\s+(.+)\s+',html)
+    actors = format_data(actors_a)
     return{"name":name,"type":type,"actors":actors}
 
 
@@ -48,7 +42,7 @@ def format_data(actors):
     # set() 函数创建一个无序不重复元素集，可进行关系测试，删除重复数据，还可以计算交集、差集、并集等。
     actor_set = set()
     for actor in actors:
-        actor_set.add(actor.text.strip())
+        actor_set.add(actor.strip())
     return actor_set
 
 def main():

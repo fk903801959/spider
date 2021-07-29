@@ -1,6 +1,6 @@
 from fake_useragent import UserAgent
 import requests
-from lxml import etree
+from bs4 import BeautifulSoup
 from time import sleep
 
 # 获取指定url地址的页面信息
@@ -20,25 +20,29 @@ def get_html(url):
 # 获取页面信息中关于电影列表的url信息
 def parse_list(html):
     if html:
-        e = etree.HTML(html)
-        #由于每次获得的电影地址为相对路径，故需要在每条相对路径前加上'https://maoyan.com'形成网页的绝对路径
-        list_url = ['https://maoyan.com{}'.format(url) for url in e.xpath('//div[@class="channel-detail movie-item-title"]/a/@href')]
+        soup = BeautifulSoup(html,'lxml')
+        a_list = soup.select('.channel-detail.movie-item-title a')
+        list_url = []
+        for a in a_list:
+            list_url.append(a.get('href'))
+
+        # 由于每次获得的电影地址为相对路径，故需要在每条相对路径前加上'https://maoyan.com'形成网页的绝对路径
+        list_url = ['https://maoyan.com{}'.format(url) for url in list_url]
         return list_url
 
 # 获取每个电影的具体信息，包括电影名称、类型、导演和演员
 def parse_index(html):
-    e = etree.HTML(html)
+    soup = BeautifulSoup(html,'lxml')
     # 电影名称
-    name = e.xpath("//div/h1/text()")[0]
+    name = soup.select('h1.name')[0].text
     # 电影类型
-    type = e.xpath("//div/ul/li/a[@class='text-link']/text()")[0]
-    # 电影封面
-    img = e.xpath("//div[@class='celeInfo-left']/div[@class='avatar-shadow']/img/@src")[0]
-    # 导演
-    director = e.xpath("//div[@class='celebrity-container']/div[@class='celebrity-group'][1]/ul[@class='celebrity-list clearfix']/li[@class='celebrity ']/div[@class='info']/a[@class='name']/text()")[0]
+    type = []
+    for i in range(soup.select('.ellipsis a').__len__()):
+        type.append(soup.select('.ellipsis a')[i].text)
     # 演员列表
-    actors = format_data(e.xpath("//li[@class='celebrity actor']/div/a/text()"))
-    return{"name":name,"type":type,"img":img,"director":director.strip(),"actors":actors}
+    actors = soup.select('.celebrity.actor .info a')
+    actors = format_data(actors)
+    return{"name":name,"type":type,"actors":actors}
 
 
 # 由于得到的演员信息存在重复，需进行去重处理，用到了set()方法
@@ -46,7 +50,7 @@ def format_data(actors):
     # set() 函数创建一个无序不重复元素集，可进行关系测试，删除重复数据，还可以计算交集、差集、并集等。
     actor_set = set()
     for actor in actors:
-        actor_set.add(actor.strip())
+        actor_set.add(actor.text.strip())
     return actor_set
 
 def main():
