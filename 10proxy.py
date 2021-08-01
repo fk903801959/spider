@@ -7,7 +7,7 @@ headers = {"User-Agent":ua.random}
 request = Request(url,headers=headers)
 
 # 创建一个ProxyHandler控制器，用于设置匿名ip
-handler = ProxyHandler({"http":"203.91.121.212:3128"})
+handler = ProxyHandler({"http":"47.107.128.69:888"})
 #如果使用的是独享代理，格式应为："http":"name:password@ip:port"
 
 
