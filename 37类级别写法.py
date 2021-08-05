@@ -26,7 +26,7 @@ class Parser:
 # 数据保存
 class DataOutPut:
     def do_save(self, datas):
-        with open('yinfansi/movie_title.txt','a',encoding='utf-8') as f:
+        with open('yinfansi_movie/movie_title.txt', 'a', encoding='utf-8') as f:
             for data in datas:
                 f.write(data+'\n')
 

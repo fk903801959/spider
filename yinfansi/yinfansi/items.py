@@ -8,10 +8,7 @@ import scrapy
 
 class MovieListItem(scrapy.Item):
     name = scrapy.Field()
-    star = scrapy.Field()
 
 class MovieInfoItem(scrapy.Item):
     movie_name = scrapy.Field()
-    director = scrapy.Field()
-    type = scrapy.Field()
-
+    tag = scrapy.Field()

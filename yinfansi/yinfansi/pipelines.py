@@ -6,10 +6,10 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from yinfansi.items import MovieListItem,MovieInfoItem
 from json import dumps
-from douban.items import MovieListItem,MovieInfoItem
 
-class DoubanPipeline:
+class YinfansiPipeline:
     def open_spider(self,spider):
         self.filename1 = open('movie_list.txt','w',encoding='utf-8')
         self.filename2 = open('movie_info.txt', 'w', encoding='utf-8')
@@ -27,3 +27,4 @@ class DoubanPipeline:
     def close_spider(self,spider):
         self.filename1.close()
         self.filename2.close()
+

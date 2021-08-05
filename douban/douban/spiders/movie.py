@@ -1,5 +1,5 @@
 import scrapy
-from douban.items import DoubanItem
+from douban.items import MovieListItem,MovieInfoItem
 
 class MovieSpider(scrapy.Spider):
     name = 'movie'
@@ -17,7 +17,7 @@ class MovieSpider(scrapy.Spider):
         #         'star':star
         #     }
 
-        item = DoubanItem()
+        item = MovieListItem()
         for name,star in zip(names,stars):
              item['name'] = name
              item['star'] = star
@@ -27,7 +27,17 @@ class MovieSpider(scrapy.Spider):
             yield scrapy.Request(url,callback=self.parse_info)
 
     def parse_info(self,response):
-        movie_name = response.xpath("//div[@id='content']/h1/span[1]").extract()
-        director = response.xpath("//span[1]/span[@class='attrs']/a").extract()
+        movie_names = response.xpath("//h1/span[1]/text()").extract()
+        directors = response.xpath("//span[1]/span[@class='attrs']/a").extract()
+        types = response.xpath("//span[@property='v:genre']").extract()
+
+        item = MovieInfoItem()
+        for movie_name,director,type in zip(movie_names,directors,types):
+            item['movie_name'] = movie_name
+            item['director'] = director
+            item['type'] = type
+            yield item
+
+
 
 
