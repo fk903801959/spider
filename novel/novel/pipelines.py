@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from novel.items import bookinfo,bookcontent
+from novel.items import bookinfo,bookcontent,bookcontent2
 import os
 
 charpter_dict = {}
@@ -28,3 +28,11 @@ class NovelPipeline:
                         f.write('\n'.join(item['content']))
                     f.close()
 
+        elif isinstance(item, bookcontent2):
+            if not os.path.exists('剑斩青空'):
+                os.mkdir('剑斩青空')
+            filepath = '剑斩青空/{}.txt'.format(item['title'])
+            print(type(filepath))
+            with open(filepath,'a',encoding='utf-8') as f:
+                f.write('\n'.join(item['content']))
+            f.close()

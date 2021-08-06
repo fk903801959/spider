@@ -13,3 +13,7 @@ class bookinfo(scrapy.Item):
 class bookcontent(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
+
+class bookcontent2(scrapy.Item):
+    title = scrapy.Field()
+    content = scrapy.Field()
