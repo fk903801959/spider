@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-# 配置文件，如：递归的层数、并发数，延迟下载等
-# Scrapy settings for scrapy_first project
+# Scrapy settings for qiantu project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'scrapy_first'
+BOT_NAME = 'qiantu'
 
-SPIDER_MODULES = ['scrapy_first.spiders']
-NEWSPIDER_MODULE = 'scrapy_first.spiders'
+SPIDER_MODULES = ['qiantu.spiders']
+NEWSPIDER_MODULE = 'qiantu.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -27,7 +25,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -47,14 +45,14 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'scrapy_first.middlewares.ScrapyFirstSpiderMiddleware': 543,
+#    'qiantu.middlewares.QiantuSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-   'scrapy_first.middlewares.UserAgentMiddleware': 200,
-}
+#DOWNLOADER_MIDDLEWARES = {
+#    'qiantu.middlewares.QiantuDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -64,9 +62,11 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scrapy_first.pipelines.ScrapyFirstPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'qiantu.pipelines.ImagePipeline':300
+   # 'scrapy.pipelines.images.ImagesPipeline': 300,
+}
+IMAGES_STORE = 'e:/qiantu'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
