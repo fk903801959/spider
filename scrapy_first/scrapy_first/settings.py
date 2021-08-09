@@ -54,7 +54,7 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    'scrapy_first.middlewares.UserAgentMiddleware': 200,
-   'scrapy_first.middlewares.ProxyMiddleware':201
+   # 'scrapy_first.middlewares.ProxyMiddleware':201
 }
 
 # Enable or disable extensions
