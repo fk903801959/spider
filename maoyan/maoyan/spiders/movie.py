@@ -9,5 +9,8 @@ class MovieSpider(scrapy.Spider):
     def parse(self, response):
         names = response.xpath("//div[@class='channel-detail movie-item-title']/@title").extract()
         stars = [div.xpath('string(.)').extract_first() for div in response.xpath("//div[@class='channel-detail channel-detail-orange']")]
-        print(names)
-        print(stars)
+        for name,star in zip(names,stars):
+            yield{
+                'name':name,
+                'star':star
+            }
