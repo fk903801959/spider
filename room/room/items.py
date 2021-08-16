@@ -7,6 +7,13 @@ import scrapy
 
 
 class RoomItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    total = scrapy.Field()
+    community_name = scrapy.Field()
+    areaName = scrapy.Field()
+    hu_xing = scrapy.Field()
+    mian_ji = scrapy.Field()
+    chao_xiang = scrapy.Field()
+    zhaung_xiu = scrapy.Field()
+    dian_ti = scrapy.Field()
+    di_ya = scrapy.Field()
+    yong_tu = scrapy.Field()

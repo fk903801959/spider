@@ -1,15 +1,25 @@
 import scrapy
 from room.items import RoomItem
+from scrapy_redis.spiders import RedisSpider
 
-class LianjiaSpider(scrapy.Spider):
-    name = 'lianjia'
+class LianjiaSpider(RedisSpider):
+    name = 'redis_lianjia'
     allowed_domains = ['lianjia.com']
-    start_urls = ['https://hui.lianjia.com/ershoufang/']
+
+    # 对于RedisSpider对象而言，rdis_key相当于普通Spider对象里的start_urls，是开始爬取的起始地址，应预先存储在redis库中。
+    redis_key = "lianjia:start_urls"
+    index = 1
+
+    # start_urls = ['https://hui.lianjia.com/ershoufang/']
 
     def parse(self, response):
+        base_url = 'https://hui.lianjia.com/ershoufang/pg{}/'
         all_urls = response.xpath("//div[@class='info clear']/div/a/@href").extract()
         for url in all_urls:
             yield scrapy.Request(url,callback=self.parse_info)
+
+        yield scrapy.Request(base_url.format(self.index+1),callback=self.parse)
+        self.index += 1
 
     def parse_info(self,response):
         total = response.xpath("concat(//div[@class='price ']/span[@class='total'],//div[@class='price ']/span[@class='unit'])").extract_first()
